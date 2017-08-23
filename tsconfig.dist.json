@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "declaration": true,
     "stripInternal": true,
+    "noImplicitAny": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "module": "commonjs",
@@ -16,13 +17,8 @@
     "target": "es5",
     "skipLibCheck": true
   },
-  "files": [
-    "src/index.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "spec"
-  ],
+  "files": ["src/index.ts"],
+  "exclude": ["node_modules", "spec"],
   "angularCompilerOptions": {
     "strictMetadataEmit": true
   }

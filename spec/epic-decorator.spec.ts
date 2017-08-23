@@ -3,11 +3,10 @@ import { Epic, getEpicsMetadata, createEpics } from '../src/epic-decorator';
 describe('Epic Metadata', () => {
   it('should get the epic metadata', () => {
     class Test {
-      @Epic() epicOne = () => { };
-      @Epic() epicTwo = () => { };
-      notAnEpic = () => { };
+      @Epic() epicOne = () => {};
+      @Epic() epicTwo = () => {};
+      notAnEpic = () => {};
     }
-
 
     const mock = new Test();
     const actual = getEpicsMetadata(mock);
@@ -18,13 +17,11 @@ describe('Epic Metadata', () => {
 
   it('should return an empty array if no epics have been defined', () => {
     class Test {
-      noEpic = () => { };
+      noEpic = () => {};
     }
     const mock = new Test();
     const actual = getEpicsMetadata(mock);
-    const expected = [];
+    const expected: any = [];
     expect(actual).toEqual(expected);
-
-
   });
 });

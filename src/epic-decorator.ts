@@ -2,7 +2,9 @@ import { Action } from 'redux';
 import {
   EpicMiddleware,
   combineEpics,
-  createEpicMiddleware
+  createEpicMiddleware,
+  Epic,
+  Options
 } from 'redux-observable';
 const METADATA_KEY = 'redux-observable-decorator-metadata';
 
@@ -32,17 +34,17 @@ export function getEpicsMetadata(instance: any): EpicMetadata[] {
   return (Reflect as any).getOwnMetadata(METADATA_KEY, target);
 }
 
-function isOptions(...instanceOrOptions) {
+function isOptions(...instanceOrOptions: any[]) {
   let option = instanceOrOptions[instanceOrOptions.length - 1];
   let keys = option ? Object.keys(option) : [];
   return keys.indexOf('dependencies') >= 0 || keys.indexOf('adapter') >= 0;
 }
-export function createEpics<T extends Action, S>(
-  epic,
-  ...epicsOrOptions
-): EpicMiddleware<T, S> {
-  let instances;
-  let options;
+export function createEpics<T extends Action, S, D = any>(
+  epic: any,
+  ...epicsOrOptions: any[]
+): EpicMiddleware<T, S, D> {
+  let instances: any;
+  let options: Options<D>;
   if (isOptions(...epicsOrOptions)) {
     options = epicsOrOptions.slice(
       epicsOrOptions.length - 1,
@@ -51,11 +53,11 @@ export function createEpics<T extends Action, S>(
   }
   instances = [epic, ...epicsOrOptions];
 
-  const epicsMetaData = instances.map(instance =>
+  const epicsMetaData = instances.map((instance: any) =>
     getEpicsMetadata(instance).map(({ propertyName }) => instance[propertyName])
   );
 
-  const epics = [].concat(...epicsMetaData);
+  const epics: Epic<T, S, D>[] = [].concat(...epicsMetaData);
   const rootEpic = combineEpics<T, S>(...epics);
-  return createEpicMiddleware<T, S>(rootEpic, options);
+  return createEpicMiddleware<T, S, D>(rootEpic, options);
 }
